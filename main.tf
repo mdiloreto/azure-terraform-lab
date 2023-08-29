@@ -40,6 +40,8 @@ resource "azurerm_storage_account" "functionapp-py-consumption-sa" {
   account_replication_type = "LRS"
 }
 
+#azurerm_app_service_plan fue deprecado y sustituido por azurerm_service_plan 
+
 # resource "azurerm_app_service_plan" "functionapp-py-consumption-asp" {
 #   name                = local.azure_functions_asp_name
 #   location            = azurerm_resource_group.functionapp-py-consumption-rg.location
@@ -88,6 +90,7 @@ resource "azurerm_linux_function_app" "functionapp-py-consumption-fa" {
   
   }
 }
+#azurerm_function_app fue deprecado y sustituido por azurerm_linux_function_app y azurerm_windows_function_app 
 
 # resource "azurerm_function_app" "functionapp-py-consumption-fa" {
 #   name                       = local.functionapp_name
