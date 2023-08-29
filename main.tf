@@ -87,6 +87,12 @@ resource "azurerm_linux_function_app" "functionapp-py-consumption-fa" {
     application_stack {
       python_version = "3.10"
     }  
+    cors {
+      allowed_origins = [
+        "https://portal.azure.com",
+      ]
+      support_credentials = false
+    }  
   
   }
 }
@@ -111,4 +117,4 @@ resource "azurerm_linux_function_app" "functionapp-py-consumption-fa" {
 #   }
 # }
 
-#END> Function App Python 3.10 con Consumption plan <
+#END > Function App Python 3.10 con Consumption plan <
