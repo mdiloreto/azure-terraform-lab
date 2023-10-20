@@ -1,0 +1,4 @@
+spec:
+  type: LoadBalancer
+
+  #kubectl patch svc argocd-server -n argocd --patch-file ./modules/aks_cluster/patch.yaml

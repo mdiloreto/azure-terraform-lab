@@ -39,10 +39,6 @@ module "random_provider" {
 
 }
 
-module "functions" {
-  source = "./Modules/Functions"
-  functionapp_name = "functionapp${module.random_provider.random_value}"
-  functionapp_rg_name = "functionapp${module.random_provider.random_value}-rg"
-  functionapp_sa_name = "functionapp${module.random_provider.random_value}sa"
-  azure_functions_asp_name = "functionapp${module.random_provider.random_value}asp"
+module "ubuntu20-04_vm" {
+  source = "./Modules/ubuntu20-04_vm"
 }

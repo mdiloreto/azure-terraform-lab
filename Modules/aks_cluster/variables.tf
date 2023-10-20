@@ -1,11 +1,13 @@
-variable ssh_public_key {}
+# variable ssh_public_key {
+
+# }
 
 variable environment {
     default = "dev"
 }
 
 variable location {
-    default = "westeurope"
+    default = "eastus"
 }
 
 variable node_count {
