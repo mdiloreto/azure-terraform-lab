@@ -17,6 +17,17 @@ resource "azurerm_subnet" "internal" {
   address_prefixes     = ["10.0.2.0/24"]
 }
 
+# Create public IPs
+resource "azurerm_public_ip" "my_terraform_public_ip" {
+  name                = "${var.vmname}-public-ip"
+  location            = var.location
+  resource_group_name = var.rg
+  sku = "Basic"
+  allocation_method   = "Dynamic"
+  sku_tier = "Regional"
+  ip_version = "IPv4"
+}
+
 resource "azurerm_network_interface" "vmnic01" {
   name                = "${var.vmname}-nic01"
   location            = var.location
@@ -26,6 +37,8 @@ resource "azurerm_network_interface" "vmnic01" {
     name                          = "testconfiguration1"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.my_terraform_public_ip.id
+
   }
 }
 
@@ -39,9 +52,6 @@ resource "azurerm_virtual_machine" "vm" {
   resource_group_name   = azurerm_resource_group.madsblog.name
   tags                  = {}
   vm_size               = "Standard_E2s_v3"
-  zones                 = [
-      "1",
-  ]
   delete_os_disk_on_termination = true
   delete_data_disks_on_termination = true
   

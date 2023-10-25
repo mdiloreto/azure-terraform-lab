@@ -31,14 +31,16 @@ provider "azuread" {
   tenant_id = "88940f07-5551-49e6-8453-c578e8759aaf"
 }
 
-module "random_provider" {
+# module "random_provider" {
+#   source = "./Modules/random_provider"
+#   max = 9999
+#   min = 0
 
-  source = "./Modules/random_provider"
-  max = 9999
-  min = 0
-
-}
+# }
 
 module "ubuntu20-04_vm" {
   source = "./Modules/ubuntu20-04_vm"
+  vmname = "ansible"
+  rg = "ansible-test"
+  
 }
