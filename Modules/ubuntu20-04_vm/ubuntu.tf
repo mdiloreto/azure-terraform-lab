@@ -1,4 +1,6 @@
+
 resource "azurerm_resource_group" "madsblog" {
+  count    = var.create_rg ? 1 : 0  # Create RG if var.create_rg is true
   name     = var.rg
   location = var.location
 }
@@ -7,14 +9,18 @@ resource "azurerm_virtual_network" "main" {
   name                = "${var.vmname}-network"
   address_space       = ["10.0.0.0/16"]
   location            = var.location
-  resource_group_name = azurerm_resource_group.madsblog.name
+  resource_group_name = var.rg
+  count    = var.create_vnet ? 1 : 0  # Create RG if var.create_rg is true
+
 }
 
 resource "azurerm_subnet" "internal" {
   name                 = "internal"
-  resource_group_name  = azurerm_resource_group.madsblog.name
-  virtual_network_name = azurerm_virtual_network.main.name
+  resource_group_name  = var.rg
+  virtual_network_name = var.vnet
   address_prefixes     = ["10.0.2.0/24"]
+  count    = var.create_vnet ? 1 : 0  # Create RG if var.create_rg is true
+
 }
 
 # Create public IPs
@@ -31,11 +37,11 @@ resource "azurerm_public_ip" "my_terraform_public_ip" {
 resource "azurerm_network_interface" "vmnic01" {
   name                = "${var.vmname}-nic01"
   location            = var.location
-  resource_group_name = azurerm_resource_group.madsblog.name
+  resource_group_name = var.rg
 
-  ip_configuration {
-    name                          = "testconfiguration1"
-    subnet_id                     = azurerm_subnet.internal.id
+   ip_configuration {
+    name                          = "${var.vmname}-nicconfiguration1"
+    subnet_id = var.create_vnet ? azurerm_subnet.internal[1].id : var.subnet_id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.my_terraform_public_ip.id
 
@@ -49,9 +55,9 @@ resource "azurerm_virtual_machine" "vm" {
   network_interface_ids = [
       azurerm_network_interface.vmnic01.id,
   ]
-  resource_group_name   = azurerm_resource_group.madsblog.name
+  resource_group_name   = var.rg
   tags                  = {}
-  vm_size               = "Standard_E2s_v3"
+  vm_size               = "Standard_B2s"
   delete_os_disk_on_termination = true
   delete_data_disks_on_termination = true
   
@@ -63,8 +69,13 @@ resource "azurerm_virtual_machine" "vm" {
 
   os_profile_linux_config {
     disable_password_authentication = false
-  }
 
+    ssh_keys {
+    path     = "/home/${var.admin_username}/.ssh/authorized_keys"
+    key_data = var.create_sshkey ? file(var.ssh_pub_key_path) : ""
+  }
+  }
+  
   storage_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-focal"

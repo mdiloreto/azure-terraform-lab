@@ -1,20 +1,26 @@
 resource "azurerm_resource_group" "madsblog-rg" {
   name     = var.rg
   location = var.location
+  count    = var.create_rg ? 1 : 0  # Create RG if var.create_rg is true
+
 }
 
 resource "azurerm_virtual_network" "main" {
-  name                = "${var.vmname}-network"
+  name                = var.vnet
   address_space       = ["10.0.0.0/16"]
   location            = var.location
   resource_group_name = var.rg
+  count    = var.create_vnet ? 1 : 0  # Create RG if var.create_rg is true
+
 }
 
 resource "azurerm_subnet" "internal" {
   name                 = "internal"
   resource_group_name  = var.rg
-  virtual_network_name = azurerm_virtual_network.main.name
+  virtual_network_name = var.vnet
   address_prefixes     = ["10.0.2.0/24"]
+  count    = var.create_vnet ? 1 : 0  # Create RG if var.create_rg is true
+
 }
 
 resource "azurerm_network_interface" "w10_vmnic" {
@@ -23,8 +29,8 @@ resource "azurerm_network_interface" "w10_vmnic" {
   resource_group_name = var.rg
 
   ip_configuration {
-    name                          = "testconfiguration1"
-    subnet_id                     = azurerm_subnet.internal.id
+    name                          = "${var.vmname}-nicconfiguration1"
+    subnet_id = var.create_vnet ? azurerm_subnet.internal[1].id : var.subnet_id
     private_ip_address_allocation = "Dynamic"
   }
 }
