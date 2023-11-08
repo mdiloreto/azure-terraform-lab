@@ -2,7 +2,6 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.72.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -19,17 +18,20 @@ terraform {
 }
 
 provider "azurerm" {
-  alias           = "MPN"
-  subscription_id = "f64ded84-0267-4150-b30c-a1f7ed8abe5f"
-  tenant_id       = "88940f07-5551-49e6-8453-c578e8759aaf"
-  features {
+features {}
     # resource_group {
     #  prevent_deletion_if_contains_resources = false
-    # }
-  }
+    # } 
+  #alias           = "mpn" # can not have an alias if its the default provider
+  subscription_id = "f64ded84-0267-4150-b30c-a1f7ed8abe5f"
+  tenant_id       = "88940f07-5551-49e6-8453-c578e8759aaf"
 }
 
 # Configure the Azure Active Directory Provider
 provider "azuread" {
   tenant_id = "88940f07-5551-49e6-8453-c578e8759aaf"
 }
+
+# provider azurerm {
+# features {}
+# }

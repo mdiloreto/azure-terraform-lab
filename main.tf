@@ -1,3 +1,5 @@
+
+
 # module "random_provider" {
 #   source = "./Modules/random_provider"
 #   max = 9999
@@ -40,8 +42,9 @@ module "ubuntu20-04_vm" {
 }
 
 module "ubuntu20-04_vm-client" {
+  count            = 3
   source           = "./Modules/ubuntu20-04_vm"
-  vmname           = "ansible-client"
+  vmname           = "ansible-client${count.index + 1}"
   rg               = azurerm_resource_group.rg01.name
   create_rg        = "false"
   depends_on       = [azurerm_subnet.internal]
@@ -52,31 +55,6 @@ module "ubuntu20-04_vm-client" {
   ssh_pub_key_path = "C:/Users/mdiloreto/OneDrive - Wezen Group/VSCODE/PrivateKeys/Ansible_VMs_azure.pub"
 }
 
-module "ubuntu20-04_vm-client2" {
-  source           = "./Modules/ubuntu20-04_vm"
-  vmname           = "ansible-cli2"
-  rg               = azurerm_resource_group.rg01.name
-  create_rg        = "false"
-  depends_on       = [azurerm_subnet.internal]
-  create_vnet      = "false"
-  vnet             = azurerm_virtual_network.main.name
-  subnet_id        = azurerm_subnet.internal.id
-  create_sshkey    = true
-  ssh_pub_key_path = "C:/Users/mdiloreto/OneDrive - Wezen Group/VSCODE/PrivateKeys/Ansible_VMs_azure.pub"
-}
-
-module "ubuntu20-04_vm-client3" {
-  source           = "./Modules/ubuntu20-04_vm"
-  vmname           = "ansible-cli3"
-  rg               = azurerm_resource_group.rg01.name
-  create_rg        = "false"
-  depends_on       = [azurerm_subnet.internal]
-  create_vnet      = "false"
-  vnet             = azurerm_virtual_network.main.name
-  subnet_id        = azurerm_subnet.internal.id
-  create_sshkey    = true
-  ssh_pub_key_path = "C:/Users/mdiloreto/OneDrive - Wezen Group/VSCODE/PrivateKeys/Ansible_VMs_azure.pub"
-}
 
 module "ubuntu20-04_vm-client_win" {
   source      = "./Modules/w10_vm"
