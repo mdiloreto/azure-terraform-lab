@@ -2,6 +2,12 @@ variable "rg" {
   default = "ubuntu-rg"
 }
 
+variable "vm_count" {
+  description = "The number of virtual machines to create"
+  type        = number
+  default = 1
+}
+
 variable "vmname" {
   default = "ubuntuvm"
 }
@@ -43,6 +49,11 @@ variable "create_vnet" {
   description = "Whether to create a new resource group or use an existing one"
   type        = bool
   default = "true"
+}
+
+variable "subnet_name" {
+  description = "the subnet name"
+  default = "internal"
 }
 
 variable "subnet_id" {

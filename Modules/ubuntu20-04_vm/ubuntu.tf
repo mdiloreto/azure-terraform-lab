@@ -6,26 +6,28 @@ resource "azurerm_resource_group" "madsblog" {
 }
 
 resource "azurerm_virtual_network" "main" {
-  name                = "${var.vmname}-network"
+  count    = var.create_vnet ? 1 : 0  # Create RG if var.create_rg is true
+  
+  name                = "${var.vmname}${count.index + 1}-network"
   address_space       = ["10.0.0.0/16"]
   location            = var.location
   resource_group_name = var.rg
-  count    = var.create_vnet ? 1 : 0  # Create RG if var.create_rg is true
-
 }
 
 resource "azurerm_subnet" "internal" {
-  name                 = "internal"
+  count    = var.create_vnet ? 1 : 0  # Create RG if var.create_rg is true
+
+  name                 = var.subnet_name
   resource_group_name  = var.rg
   virtual_network_name = var.vnet
   address_prefixes     = ["10.0.2.0/24"]
-  count    = var.create_vnet ? 1 : 0  # Create RG if var.create_rg is true
-
 }
 
 # Create public IPs
 resource "azurerm_public_ip" "my_terraform_public_ip" {
-  name                = "${var.vmname}-public-ip"
+  count               = var.vm_count
+
+  name                = "${var.vmname}${count.index + 1}-public-ip"
   location            = var.location
   resource_group_name = var.rg
   sku = "Basic"
@@ -35,25 +37,27 @@ resource "azurerm_public_ip" "my_terraform_public_ip" {
 }
 
 resource "azurerm_network_interface" "vmnic01" {
-  name                = "${var.vmname}-nic01"
+  count               = var.vm_count
+  name                = "${var.vmname}${count.index + 1}-nic01"
   location            = var.location
   resource_group_name = var.rg
 
    ip_configuration {
-    name                          = "${var.vmname}-nicconfiguration1"
-    subnet_id = var.create_vnet ? azurerm_subnet.internal[1].id : var.subnet_id
+    name                          = "${var.vmname}${count.index + 1}-nicconfiguration1"
+    subnet_id = var.create_vnet ? azurerm_subnet.internal[count.index].id : var.subnet_id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.my_terraform_public_ip.id
+    public_ip_address_id          = azurerm_public_ip.my_terraform_public_ip[count.index].id
 
   }
 }
 
 resource "azurerm_virtual_machine" "vm" {
+  count               = var.vm_count  
   
   location = var.location
-  name = var.vmname
+  name = "${var.vmname}${count.index + 1}"
   network_interface_ids = [
-      azurerm_network_interface.vmnic01.id,
+      azurerm_network_interface.vmnic01[count.index].id,
   ]
   resource_group_name   = var.rg
   tags                  = {}
@@ -62,7 +66,7 @@ resource "azurerm_virtual_machine" "vm" {
   delete_data_disks_on_termination = true
   
   os_profile {
-    computer_name = var.vmname
+    computer_name = "${var.vmname}${count.index + 1}"
     admin_username = var.admin_username
     admin_password = var.admin_password
   }
@@ -88,7 +92,7 @@ resource "azurerm_virtual_machine" "vm" {
       create_option             = "FromImage"
       disk_size_gb              = 127
       managed_disk_type         = "Premium_LRS"
-      name                      = "${var.vmname}-disk"
+      name                      = "${var.vmname}${count.index + 1}-disk"
       os_type                   = "Linux"
       write_accelerator_enabled = false
   }

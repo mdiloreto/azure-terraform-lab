@@ -24,23 +24,26 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_network_interface" "w10_vmnic" {
-  name                = "${var.vmname}-nic"
+  count                  = var.vm_count
+  
+  name                = "${var.vmname}${count.index + 1}-nic"
   location            = var.location
   resource_group_name = var.rg
 
   ip_configuration {
-    name                          = "${var.vmname}-nicconfiguration1"
-    subnet_id = var.create_vnet ? azurerm_subnet.internal[1].id : var.subnet_id
+    name                          = "${var.vmname}${count.index + 1}-nicconfiguration1"
+    subnet_id = var.create_vnet ? azurerm_subnet.internal[count.index].id : var.subnet_id
     private_ip_address_allocation = "Dynamic"
   }
 }
 
-resource "azurerm_virtual_machine" "w10_vmnic" {
-  
+resource "azurerm_virtual_machine" "w10_vm" {
+  count                  = var.vm_count
+
   location = var.location
-  name = var.vmname
+  name = "${var.vmname}${count.index + 1}"
   network_interface_ids = [
-      azurerm_network_interface.w10_vmnic.id,
+      azurerm_network_interface.w10_vmnic[count.index].id,
   ]
   resource_group_name   = var.rg
   tags                  = {}
@@ -52,7 +55,7 @@ resource "azurerm_virtual_machine" "w10_vmnic" {
   delete_data_disks_on_termination = true
 
   os_profile {
-    computer_name = var.vmname
+    computer_name = "${var.vmname}${count.index + 1}"
     admin_username = var.admin_username
     admin_password = var.admin_password
   }
@@ -74,7 +77,7 @@ resource "azurerm_virtual_machine" "w10_vmnic" {
       create_option             = "FromImage"
       disk_size_gb              = 127
       managed_disk_type         = "Premium_LRS"
-      name                      = "${var.vmname}-disk"
+      name                      = "${var.vmname}${count.index + 1}-disk"
       os_type                   = "Windows"
       write_accelerator_enabled = false
   }

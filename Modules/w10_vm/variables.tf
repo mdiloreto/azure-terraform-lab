@@ -3,6 +3,12 @@ variable "rg" {
   default = "w10-rg"
 }
 
+variable "vm_count" {
+  description = "The number of virtual machines to create"
+  type        = number
+  default = 1
+}
+
 variable "vmname" {
   description = "Virtual Machine Name"
   default = "w10"
