@@ -40,7 +40,7 @@ module "ubuntu20-04_vm" {
   create_sshkey    = var.create_sshkey
   ssh_pub_key_path = var.ssh_pub_key_path
 
-  depends_on       = [azurerm_subnet.internal]
+  depends_on = [azurerm_subnet.internal]
 }
 
 module "ubuntu20-04_vm-client" {
@@ -59,7 +59,7 @@ module "ubuntu20-04_vm-client" {
 
 
 module "ubuntu20-04_vm-client_win" {
-  count            = 0
+  count       = 0
   source      = "./Modules/w10_vm"
   vmname      = "ans-cli-win10"
   rg          = azurerm_resource_group.rg01.name

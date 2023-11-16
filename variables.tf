@@ -23,13 +23,13 @@ variable "subnet_address_space" {
 variable "vm_name" {
   description = "The name of the VM"
   type        = string
-  default = "madsblog-vm"
+  default     = "madsblog-vm"
 }
 
 variable "create_sshkey" {
   description = "Do you want the VM to use SSH key? yes (true) or no (false)"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "ssh_pub_key_path" {
@@ -38,19 +38,19 @@ variable "ssh_pub_key_path" {
 }
 
 variable "subnet_name" {
-    description = "The subnet name"
-    default = "internal"
+  description = "The subnet name"
+  default     = "internal"
 }
 
 variable "vm_client_name" {
   description = "The name of the client VM"
   type        = string
-  default = "madsblog-cli"
+  default     = "madsblog-cli"
 }
 
 variable "vm_client_win_name" {
   description = "The name of the Windows client VM"
   type        = string
-  default = "mb-win-cli"
+  default     = "mb-win-cli"
 }
 
