@@ -33,8 +33,8 @@ module "ubuntu20-04_vm" {
   source           = "./Modules/ubuntu20-04_vm"
   vmname           = var.vm_name
   rg               = azurerm_resource_group.rg01.name
-  create_rg        = "false"
-  create_vnet      = "false"
+  create_rg        = var.create_rg
+  create_vnet      = var.create_vnet
   vnet             = azurerm_virtual_network.main.name
   subnet_id        = azurerm_subnet.internal.id
   create_sshkey    = var.create_sshkey
@@ -48,9 +48,9 @@ module "ubuntu20-04_vm-client" {
   source           = "./Modules/ubuntu20-04_vm"
   vmname           = var.vm_client_name
   rg               = azurerm_resource_group.rg01.name
-  create_rg        = "false"
+  create_rg        = var.create_rg
   depends_on       = [azurerm_subnet.internal]
-  create_vnet      = "false"
+  create_vnet      = var.create_vnet
   vnet             = azurerm_virtual_network.main.name
   subnet_id        = azurerm_subnet.internal.id
   create_sshkey    = var.create_sshkey
@@ -61,11 +61,11 @@ module "ubuntu20-04_vm-client" {
 module "ubuntu20-04_vm-client_win" {
   count       = 0
   source      = "./Modules/w10_vm"
-  vmname      = "ans-cli-win10"
+  vmname      = var.vm_client_win_name
   rg          = azurerm_resource_group.rg01.name
-  create_rg   = "false"
+  create_rg   = var.create_rg
   depends_on  = [azurerm_subnet.internal]
-  create_vnet = "false"
+  create_vnet = var.create_vnet
   vnet        = azurerm_virtual_network.main.name
   subnet_id   = azurerm_subnet.internal.id
 }

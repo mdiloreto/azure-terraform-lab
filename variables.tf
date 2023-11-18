@@ -26,6 +26,19 @@ variable "vm_name" {
   default     = "madsblog-vm"
 }
 
+variable "create_rg" {
+  description = "The variable to create the RG that is created within the module. If you created it as a resource outside the module. Set to false."
+  type = bool
+  default = false
+}
+
+variable "create_vnet" {
+  description = "The variable to create the VNET that is created within the module. If you created it as a resource outside the module. Set to false."
+  type = bool
+  default = false
+}
+
+
 variable "create_sshkey" {
   description = "Do you want the VM to use SSH key? yes (true) or no (false)"
   type        = bool
