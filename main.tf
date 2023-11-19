@@ -1,12 +1,3 @@
-
-
-# module "random_provider" {
-#   source = "./Modules/random_provider"
-#   max = 9999
-#   min = 0
-
-# }
-
 resource "azurerm_resource_group" "rg01" {
   name     = var.resource_group_name
   location = var.location
