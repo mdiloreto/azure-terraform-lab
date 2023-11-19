@@ -19,11 +19,11 @@ output "ubuntu-server_vm_public_ip_addresses" {
 ## Ubuntu client outputs <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 output "ubuntu_client_modules_vmnames" {
-  value = module.ubuntu-server[*].ubuntu_server_modules_vmnames
+  value = module.ubuntu-client[*].ubuntu_server_modules_vmnames
 }
 
 output "ubuntu-client_vm_public_ip_addresses" {
-  value = module.ubuntu-server[*].vm_public_ip
+  value = module.ubuntu-client[*].vm_public_ip
   description = "Public IP addresses of the deployed VMs."
 }
 

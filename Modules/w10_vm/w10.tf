@@ -1,4 +1,4 @@
-resource "azurerm_resource_group" "madsblog-rg" {
+resource "azurerm_resource_group" "madsblog" {
   name     = var.rg
   location = var.location
   count    = var.create_rg ? 1 : 0  # Create RG if var.create_rg is true
@@ -23,6 +23,21 @@ resource "azurerm_subnet" "internal" {
 
 }
 
+
+# Create public IPs
+resource "azurerm_public_ip" "my_terraform_public_ip" {
+  count               = var.vm_count
+
+  name                = "${var.vmname}${count.index + 1}-public-ip"
+  location            = var.location
+  resource_group_name = var.rg
+  sku = "Basic"
+  allocation_method   = "Dynamic"
+  sku_tier = "Regional"
+  ip_version = "IPv4"
+}
+
+
 resource "azurerm_network_interface" "w10_vmnic" {
   count                  = var.vm_count
   
@@ -34,6 +49,7 @@ resource "azurerm_network_interface" "w10_vmnic" {
     name                          = "${var.vmname}${count.index + 1}-nicconfiguration1"
     subnet_id = var.create_vnet ? azurerm_subnet.internal[count.index].id : var.subnet_id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id = azurerm_public_ip.my_terraform_public_ip[count.index].id
   }
 }
 
