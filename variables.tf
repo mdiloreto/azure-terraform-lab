@@ -48,6 +48,7 @@ variable "create_sshkey" {
 variable "ssh_pub_key_path" {
   description = "The path to the public SSH key"
   type        = string
+  sensitive = true
 }
 
 variable "subnet_name" {

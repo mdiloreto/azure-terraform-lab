@@ -18,15 +18,18 @@ variable "location" {
 
 variable "admin_username" {
   default = "admin_user01"
+  sensitive = true
 }
 
 variable "admin_password" {
   default = "MadsBlog_2023!!"
+  sensitive = true
 }
 
 variable "ssh_pub_key_path" {
   description = "Path to the SSH public key"
   default     = "C:/Users/mdiloreto/OneDrive - Wezen Group/VSCODE/PrivateKeys/Ansible_VMs_azure.pub"
+  sensitive = true
 }
 
 variable "create_sshkey" {
