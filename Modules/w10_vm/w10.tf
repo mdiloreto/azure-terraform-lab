@@ -37,48 +37,34 @@ resource "azurerm_network_interface" "w10_vmnic" {
   }
 }
 
-resource "azurerm_virtual_machine" "w10_vm" {
-  count                  = var.vm_count
+resource "azurerm_windows_virtual_machine" "vm" {
+  count               = var.vm_count 
 
-  location = var.location
-  name = "${var.vmname}${count.index + 1}"
+  resource_group_name             = var.rg
+  location                        = var.location
+  name                            = "${var.vmname}${count.index + 1}"
+  admin_username                  = var.admin_username
+  admin_password                  = var.admin_password
+  tags                            = {}
+  size               = "Standard_B2s"
+  
   network_interface_ids = [
       azurerm_network_interface.w10_vmnic[count.index].id,
   ]
-  resource_group_name   = var.rg
-  tags                  = {}
-  vm_size               = "Standard_E2s_v3"
-  zones                 = [
-      "1",
-  ]
-  delete_os_disk_on_termination = true
-  delete_data_disks_on_termination = true
 
-  os_profile {
-    computer_name = "${var.vmname}${count.index + 1}"
-    admin_username = var.admin_username
-    admin_password = var.admin_password
+  
+  source_image_reference {
+    offer     = "Windows-10"
+    publisher = "MicrosoftWindowsDesktop"
+    sku       = "win10-22h2-pro-g2"
+    version   = "latest"
   }
 
-  os_profile_windows_config {
-      enable_automatic_upgrades = true
-      provision_vm_agent        = true
-  }
-
-  storage_image_reference {
-      offer     = "Windows-10"
-      publisher = "MicrosoftWindowsDesktop"
-      sku       = "win10-22h2-pro-g2"
-      version   = "latest"
-  }
-
-  storage_os_disk {
-      caching                   = "ReadWrite"
-      create_option             = "FromImage"
+  os_disk {
+    caching                   = "ReadWrite"
+    storage_account_type      = "Standard_LRS"
       disk_size_gb              = 127
-      managed_disk_type         = "Premium_LRS"
       name                      = "${var.vmname}${count.index + 1}-disk"
-      os_type                   = "Windows"
       write_accelerator_enabled = false
   }
 }

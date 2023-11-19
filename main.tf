@@ -28,8 +28,8 @@ resource "azurerm_subnet" "internal" {
   depends_on           = [azurerm_virtual_network.main]
 }
 
-module "ubuntu20-04_vm" {
-  count            = 1
+module "ubuntu-server" {
+  vm_count         = 2
   source           = "./Modules/ubuntu20-04_vm"
   vmname           = var.vm_name
   rg               = azurerm_resource_group.rg01.name
@@ -43,8 +43,8 @@ module "ubuntu20-04_vm" {
   depends_on = [azurerm_subnet.internal]
 }
 
-module "ubuntu20-04_vm-client" {
-  count            = 0
+module "ubuntu-client" {
+  vm_count         = 0
   source           = "./Modules/ubuntu20-04_vm"
   vmname           = var.vm_client_name
   rg               = azurerm_resource_group.rg01.name
@@ -58,8 +58,8 @@ module "ubuntu20-04_vm-client" {
 }
 
 
-module "ubuntu20-04_vm-client_win" {
-  count       = 0
+module "windows-client" {
+  vm_count    = 1
   source      = "./Modules/w10_vm"
   vmname      = var.vm_client_win_name
   rg          = azurerm_resource_group.rg01.name

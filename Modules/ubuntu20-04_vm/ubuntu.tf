@@ -51,49 +51,39 @@ resource "azurerm_network_interface" "vmnic01" {
   }
 }
 
-resource "azurerm_virtual_machine" "vm" {
-  count               = var.vm_count  
-  
-  location = var.location
-  name = "${var.vmname}${count.index + 1}"
+resource "azurerm_linux_virtual_machine" "vm" {
+  count               = var.vm_count 
+
+  resource_group_name             = var.rg
+  location                        = var.location
+  name                            = "${var.vmname}${count.index + 1}"
+  admin_username                  = var.admin_username
+  admin_password                  = var.admin_password
+  disable_password_authentication = false
+  tags                  = {}
+  size               = "Standard_B2s"
+
   network_interface_ids = [
       azurerm_network_interface.vmnic01[count.index].id,
   ]
-  resource_group_name   = var.rg
-  tags                  = {}
-  vm_size               = "Standard_B2s"
-  delete_os_disk_on_termination = true
-  delete_data_disks_on_termination = true
-  
-  os_profile {
-    computer_name = "${var.vmname}${count.index + 1}"
-    admin_username = var.admin_username
-    admin_password = var.admin_password
+
+  admin_ssh_key{
+    username = var.admin_username
+    public_key = var.create_sshkey ? file(var.ssh_pub_key_path) : ""
   }
 
-  os_profile_linux_config {
-    disable_password_authentication = false
-
-    ssh_keys {
-    path     = "/home/${var.admin_username}/.ssh/authorized_keys"
-    key_data = var.create_sshkey ? file(var.ssh_pub_key_path) : ""
-  }
-  }
-  
-  storage_image_reference {
+  source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-focal"
     sku       = "20_04-lts"
     version   = "latest"
   }
 
-  storage_os_disk {
-      caching                   = "ReadWrite"
-      create_option             = "FromImage"
-      disk_size_gb              = 127
-      managed_disk_type         = "Premium_LRS"
+  os_disk {
+    caching                   = "ReadWrite"
+    storage_account_type      = "Standard_LRS"
+      disk_size_gb              = 40
       name                      = "${var.vmname}${count.index + 1}-disk"
-      os_type                   = "Linux"
       write_accelerator_enabled = false
   }
 }
