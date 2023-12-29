@@ -20,7 +20,7 @@ resource "azurerm_subnet" "internal" {
 }
 
 module "ubuntu-server" {
-  vm_count         = 2
+  vm_count         = 1
   source           = "./Modules/ubuntu20-04_vm"
   vmname           = var.vm_name
   rg               = azurerm_resource_group.rg01.name
@@ -35,7 +35,7 @@ module "ubuntu-server" {
 }
 
 module "ubuntu-client" {
-  vm_count         = 0
+  vm_count         = 2
   source           = "./Modules/ubuntu20-04_vm"
   vmname           = var.vm_client_name
   rg               = azurerm_resource_group.rg01.name
@@ -45,7 +45,7 @@ module "ubuntu-client" {
   vnet             = azurerm_virtual_network.main.name
   subnet_id        = azurerm_subnet.internal.id
   create_sshkey    = var.create_sshkey
-  ssh_pub_key_path = var.ssh_pub_key_path
+  ssh_pub_key_path = var.ssh_pub_key_path_cli
 }
 
 
@@ -53,6 +53,18 @@ module "windows-client" {
   vm_count    = 1
   source      = "./Modules/w10_vm"
   vmname      = var.vm_client_win_name
+  rg          = azurerm_resource_group.rg01.name
+  create_rg   = var.create_rg
+  depends_on  = [azurerm_subnet.internal]
+  create_vnet = var.create_vnet
+  vnet        = azurerm_virtual_network.main.name
+  subnet_id   = azurerm_subnet.internal.id
+}
+
+module "ws2019_client" {
+  vm_count    = 2
+  source      = "./Modules/ws2019_vm"
+  vmname      = var.ws2019_client_name
   rg          = azurerm_resource_group.rg01.name
   create_rg   = var.create_rg
   depends_on  = [azurerm_subnet.internal]

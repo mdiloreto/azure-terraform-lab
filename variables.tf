@@ -51,6 +51,12 @@ variable "ssh_pub_key_path" {
   sensitive = true
 }
 
+variable "ssh_pub_key_path_cli" {
+  description = "The path to the public SSH key"
+  type        = string
+  sensitive = true
+}
+
 variable "subnet_name" {
   description = "The subnet name"
   default     = "internal"
@@ -68,3 +74,8 @@ variable "vm_client_win_name" {
   default     = "mb-win-cli"
 }
 
+variable "ws2019_client_name" {
+  description = "The name of the Windows Server client VM"
+  type        = string
+  default     = "ws2019-cli"
+}
