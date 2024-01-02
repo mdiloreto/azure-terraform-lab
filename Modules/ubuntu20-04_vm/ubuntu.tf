@@ -45,7 +45,7 @@ resource "azurerm_network_interface" "vmnic01" {
    ip_configuration {
     name                          = "${var.vmname}${count.index + 1}-nicconfiguration1"
     subnet_id = var.create_vnet ? azurerm_subnet.internal[count.index].id : var.subnet_id
-    private_ip_address_allocation = "Dynamic"
+    private_ip_address_allocation = "Static"
     public_ip_address_id          = azurerm_public_ip.my_terraform_public_ip[count.index].id
 
   }
@@ -60,8 +60,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
   admin_username                  = var.admin_username
   admin_password                  = var.admin_password
   disable_password_authentication = false
-  tags                  = {}
-  size               = "Standard_B2s"
+  tags                            = var.vm_tags[count.index]
+  size                            = "Standard_B2s"
 
   network_interface_ids = [
       azurerm_network_interface.vmnic01[count.index].id,
@@ -86,4 +86,5 @@ resource "azurerm_linux_virtual_machine" "vm" {
       name                      = "${var.vmname}${count.index + 1}-disk"
       write_accelerator_enabled = false
   }
+
 }

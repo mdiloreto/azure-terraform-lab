@@ -26,6 +26,19 @@ variable "admin_password" {
   sensitive = true
 }
 
+variable "vm_tags" {
+  description = "List of tag maps for each VM"
+  type        = list(map(string))
+   default     = [
+    {
+      #"Role" = "example",
+      #"Env"  = "production"
+    }
+    # Add more maps as needed for each VM
+  ]
+}
+
+
 variable "ssh_pub_key_path" {
   description = "Path to the SSH public key"
   default     = "C:/Users/mdiloreto/OneDrive - Wezen Group/VSCODE/PrivateKeys/Ansible_VMs_azure.pub"

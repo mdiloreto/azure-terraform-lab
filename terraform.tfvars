@@ -21,3 +21,22 @@ create_vnet = false
 create_sshkey = true
 ssh_pub_key_path = "C:/vscode/sshkeys/sshkey.pub"
 ssh_pub_key_path_cli = "C:/vscode/sshkeys/id_rsa.pub"
+vm_tags_linux = [
+    {
+        Role = "lx_web_server",
+    },
+    {
+        Role = "mysqlserver"
+    }
+    # Add more maps as needed for each VM
+  ]
+
+vm_tags_win = [
+    {
+        Role = "win_web_server",
+    },
+    {
+        Role = "mssql"
+    }
+    # Add more maps as needed for each VM
+  ]

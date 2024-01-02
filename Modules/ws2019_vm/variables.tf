@@ -46,3 +46,15 @@ variable "subnet_id" {
   type        = string
 }
 
+variable "vm_tags" {
+  description = "List of tag maps for each VM"
+  type        = list(map(string))
+   default     = [
+    {
+      #"Role" = "example",
+      #"Env"  = "production"
+    }
+    # Add more maps as needed for each VM
+  ]
+}
+

@@ -79,3 +79,13 @@ variable "ws2019_client_name" {
   type        = string
   default     = "ws2019-cli"
 }
+
+variable "vm_tags_linux" {
+  description = "List of tag maps for each VM"
+  type        = list(map(string))
+  }
+
+variable "vm_tags_win" {
+  description = "List of tag maps for each VM"
+  type        = list(map(string))
+  }

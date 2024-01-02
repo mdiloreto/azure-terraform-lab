@@ -30,8 +30,8 @@ module "ubuntu-server" {
   subnet_id        = azurerm_subnet.internal.id
   create_sshkey    = var.create_sshkey
   ssh_pub_key_path = var.ssh_pub_key_path
-
   depends_on = [azurerm_subnet.internal]
+  vm_tags = [{}]
 }
 
 module "ubuntu-client" {
@@ -46,6 +46,7 @@ module "ubuntu-client" {
   subnet_id        = azurerm_subnet.internal.id
   create_sshkey    = var.create_sshkey
   ssh_pub_key_path = var.ssh_pub_key_path_cli
+  vm_tags          = var.vm_tags_linux
 }
 
 
@@ -71,4 +72,5 @@ module "ws2019_client" {
   create_vnet = var.create_vnet
   vnet        = azurerm_virtual_network.main.name
   subnet_id   = azurerm_subnet.internal.id
+  vm_tags = var.vm_tags_win
 }

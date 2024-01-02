@@ -32,7 +32,7 @@ resource "azurerm_public_ip" "my_terraform_public_ip" {
   location            = var.location
   resource_group_name = var.rg
   sku = "Basic"
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
   sku_tier = "Regional"
   ip_version = "IPv4"
 }
@@ -61,7 +61,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
   name                            = "${var.vmname}${count.index + 1}"
   admin_username                  = var.admin_username
   admin_password                  = var.admin_password
-  tags                            = {}
+  tags                            = var.vm_tags[count.index]
   size               = "Standard_B2s"
   
   network_interface_ids = [
