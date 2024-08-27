@@ -1,31 +1,53 @@
-# variable ssh_public_key {
-
-# }
-
-variable environment {
-    default = "dev"
-}
-
-variable location {
-    default = "eastus"
-}
-
-variable node_count {
-  default = 2
-}
-
-variable password {
-  default = "MadsBlog@AKS-Cluster01"
-}
-
-variable dns_prefix {
-  default = "k8stest"
-}
-
-variable cluster_name {
-  default = "k8stest"
-}
-
-variable resource_group {
-  default = "kubernetes"
-}
+variable "tenant_id" {}
+variable "rg_location" {}
+variable "rg_name" {}
+variable "cluster_name" {}
+variable "aks_version" {default=null}
+variable "rg_nodes" {}
+variable "private" {}
+variable "upgrade" {}
+variable "mi_name" {}
+variable "policy" {}
+variable "local_acc" {}
+variable "private_fqdn" {}
+variable "http_routing" {}
+variable "auto_scaling" {}
+variable "dns_prefix" {}
+variable "sku" {}
+variable "acr_id" {}
+variable "akv_id" {}
+variable "secret" {}
+variable "adm_grp_id" {}
+variable "subnet_id" {}
+variable "appgw_sub_id" {}
+variable "appgw_sub_cdr" {}
+variable "appgw_name" {}
+variable "appgw_id" {}
+variable "pool_sys" {}
+variable "pool_sys_rot" {default=null}
+variable "pool_sys_crt" {default=null}
+variable "pool_usr" {}
+variable "pool_vm" {}
+variable "pods_max" {}
+variable "pool_size" {}
+variable "pool_zone" {}
+variable "pool_os" {}
+variable "net_dns" {}
+variable "net_bridge" {}
+variable "net_lb_sku" {}
+variable "net_plugin" {}
+variable "net_policy" {}
+variable "net_outbound" {}
+variable "net_svc_crd" {}
+variable "sto_blob" {}
+variable "sto_disk" {}
+variable "sto_file" {}
+variable "pep" {}
+variable "pep_psc" {}
+variable "pep_subnet_id" {}
+variable "pep_dns_id" {}
+variable "win_user" {}
+variable "win_pass" {}
+variable "lnx_user" {}
+variable "lnx_key" {}
+variable "tags" {}

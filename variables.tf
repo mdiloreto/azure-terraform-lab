@@ -28,14 +28,14 @@ variable "vm_name" {
 
 variable "create_rg" {
   description = "The variable to create the RG that is created within the module. If you created it as a resource outside the module. Set to false."
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "create_vnet" {
   description = "The variable to create the VNET that is created within the module. If you created it as a resource outside the module. Set to false."
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 
@@ -48,13 +48,13 @@ variable "create_sshkey" {
 variable "ssh_pub_key_path" {
   description = "The path to the public SSH key"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
 variable "ssh_pub_key_path_cli" {
   description = "The path to the public SSH key"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
 variable "subnet_name" {
@@ -83,9 +83,38 @@ variable "ws2019_client_name" {
 variable "vm_tags_linux" {
   description = "List of tag maps for each VM"
   type        = list(map(string))
-  }
+}
 
 variable "vm_tags_win" {
   description = "List of tag maps for each VM"
   type        = list(map(string))
-  }
+}
+
+### AKS 
+### AKS 
+
+variable "rg_location" {}
+variable "rg_name" {}
+variable "cluster_name" {}
+variable "rg_nodes" {}
+variable "private" {}
+variable "upgrade" {}
+variable "mi_name" {}
+variable "policy" {}
+variable "local_acc" {}
+variable "private_fqdn" {}
+variable "http_routing" {}
+variable "auto_scaling" {}
+variable "sku" {}
+
+variable "net_dns" {}
+variable "net_bridge" {}
+variable "net_lb_sku" {}
+variable "net_plugin" {}
+variable "net_policy" {}
+variable "net_outbound" {}
+variable "sto_blob" {}
+variable "sto_disk" {}
+variable "sto_file" {}
+variable "private_cluster_enabled" {}
+variable "net_svc_crd" {}
